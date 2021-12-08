@@ -102,7 +102,7 @@ public class Steque<Item> implements Iterable<Item> {
      * @return size as integer.
      */
     public int size() {
-
+        return size;
     }
     
     /**
@@ -113,4 +113,19 @@ public class Steque<Item> implements Iterable<Item> {
     public Iterator<Item> iterator() {
 
     }
+    public static void main(String[] args){
+        Steque<Integer> steque = new Steque<Integer>();
+        steque.enqueue(14);
+        steque.push(15);
+        System.out.println("empty:"+steque.isEmpty());
+        System.out.println("size:"+steque.size());
+        Iterator<Integer> arr = steque.iterator();
+        System.out.println("steque elements");
+        while(arr.hasNext())
+        System.out.println(arr.next());
+        System.out.println("popped elements");
+       while(!steque.isEmpty()){
+           System.out.println(steque.pop());
+       }
+    }}
 }
