@@ -17,7 +17,7 @@
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
+import java.lang.IllegalArgumentException;
 
 /**
  * 
@@ -29,23 +29,37 @@ import java.util.NoSuchElementException;
  * @version 1.0
  *
  */
-public class Steque<Item> implements Iterable<Item> {
-
+public class Steque_array<Item> implements Iterable<Item> {
+    private Item[] stack;
+    private int size;
+    private static int capacity = 10;
 
     /**
      * constructs a steque object.
      */
-    public Steque() {
-
+    public Steque_array() {
+        stack = (Item[]) new Object[capacity];
+        size = 0;
     }
-    
+    private void resize() {
+		int newCapacity = 2*stack.length;
+		Item[] newstack = (Item[]) new Object[newCapacity];
+		for(int i=0; i<stack.length; i++) {
+			newstack[i] = stack[i];
+		}
+		stack = newstack;
+    }
     
     /**
      * inserts an item in the steque in queue fashion.
      * @param item Item to be inserted.
      */
     public void enqueue(Item item) {
-
+        if (item == null) throw new IllegalArgumentException();
+        if(size >= stack.length) resize();
+        for(int i=stack.length-1; i > 0;i--) stack[i] = stack[i-1];
+        stack[0] = item;
+        size++;
     }
     
     
@@ -54,7 +68,10 @@ public class Steque<Item> implements Iterable<Item> {
      * @param item Item to be inserted.
      */
     public void push(Item item) {
-
+        if(item==null) throw new IllegalArgumentException();
+        if(size >= stack.length) resize();
+        stack[size] = item;
+        size++;
     }
     
     /**
@@ -62,7 +79,11 @@ public class Steque<Item> implements Iterable<Item> {
      * @return Item object from steque.
      */
     public Item pop() {
-
+        if(isEmpty()) throw new NoSuchElementException();
+        Item item = stack[size-1];
+        stack[size-1] = null;
+        size--;
+        return item;
     }
     
     /**
@@ -70,7 +91,7 @@ public class Steque<Item> implements Iterable<Item> {
      * @return true if steque is empty, false otherwise.
      */
     public boolean isEmpty() {
-
+        return size==0;
     }
     
     /**
@@ -78,7 +99,7 @@ public class Steque<Item> implements Iterable<Item> {
      * @return size as integer.
      */
     public int size() {
-
+        return size;
     }
     
     /**
@@ -87,6 +108,36 @@ public class Steque<Item> implements Iterable<Item> {
      * 
      */
     public Iterator<Item> iterator() {
-
+        return new ArrayIterator();
+    }
+    public class ArrayIterator implements Iterator<Item> {
+        public int i = size-1;     
+        public boolean hasNext() {
+            return i >= 0;
+        }
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+        public Item next() {
+            if(!hasNext()) throw new NoSuchElementException();
+            Item item = stack[i];
+            i--;
+            return item;
+        }
+    }
+    public static void main(String[] args){
+        Steque_array<Integer> steque = new Steque_array<Integer>();
+        steque.enqueue(14);
+        steque.push(15);
+        System.out.println("empty:"+steque.isEmpty());
+        System.out.println("size:"+steque.size());
+        Iterator<Integer> arr = steque.iterator();
+        System.out.println("steque elements");
+        while(arr.hasNext())
+        System.out.println(arr.next());
+        System.out.println("popped elements");
+        while(!steque.isEmpty()){
+           System.out.println(steque.pop());
+       }
     }
 }
