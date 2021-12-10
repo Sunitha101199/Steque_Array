@@ -129,6 +129,7 @@ public class Steque_array<Item> implements Iterable<Item> {
         Steque_array<Integer> steque = new Steque_array<Integer>();
         steque.enqueue(14);
         steque.push(15);
+        steque.pop();
         System.out.println("empty:"+steque.isEmpty());
         System.out.println("size:"+steque.size());
         Iterator<Integer> arr = steque.iterator();
